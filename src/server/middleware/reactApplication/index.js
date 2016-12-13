@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { CodeSplitProvider, createRenderContext } from 'code-split-component';
 import Helmet from 'react-helmet';
 import generateHTML from './generateHTML';
-import App from '../../../shared/components/App';
+import DemoApp from '../../../shared/components/DemoApp';
 import runTasksForLocation from '../../../shared/routeTasks/runTasksForLocation';
 import configureStore from '../../../shared/redux/configureStore';
 import envConfig from '../../../../config/private/environment';
@@ -57,11 +57,11 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
     const codeSplitContext = createRenderContext();
 
     // Create our application and render it into a string.
-    const app = renderToString(
+    const reactAppString = renderToString(
       <CodeSplitProvider context={codeSplitContext}>
         <ServerRouter location={request.url} context={reactRouterContext}>
           <Provider store={store}>
-            <App />
+            <DemoApp />
           </Provider>
         </ServerRouter>
       </CodeSplitProvider>,
@@ -69,8 +69,8 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
 
     // Generate the html response.
     const html = generateHTML({
-      // Provide the full app react element.
-      app,
+      // Provide the rendered React applicaiton string.
+      reactAppString,
       // Nonce which allows us to safely declare inline scripts.
       nonce,
       // Running this gets all the helmet properties (e.g. headers/scripts/title etc)

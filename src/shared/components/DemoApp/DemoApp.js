@@ -10,7 +10,7 @@ import Error404 from './Error404';
 import Header from './Header';
 import htmlPageConfig from '../../../../config/public/htmlPage';
 
-function App() {
+function DemoApp() {
   return (
     <div style={{ padding: '10px' }}>
       {/*
@@ -61,4 +61,4 @@ function App() {
   );
 }
 
-export default App;
+export default DemoApp;
