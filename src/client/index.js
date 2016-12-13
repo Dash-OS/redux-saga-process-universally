@@ -5,11 +5,20 @@ import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import { CodeSplitProvider, rehydrateState } from 'code-split-component';
+import { Provider } from 'react-redux';
+import configureStore from '../shared/redux/configureStore';
 import ReactHotLoader from './components/ReactHotLoader';
 import App from '../shared/components/App';
+import TaskRoutesExecutor from './components/TaskRoutesExecutor';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
+
+// Create our Redux store.
+const store = configureStore(
+  // Server side rendering would have mounted our state on this global.
+  window.APP_STATE,
+);
 
 function renderApp(TheApp) {
   // We use the code-split-component library to provide us with code splitting
@@ -25,9 +34,20 @@ function renderApp(TheApp) {
     render(
       <ReactHotLoader>
         <CodeSplitProvider state={codeSplitState}>
-          <BrowserRouter>
-            <TheApp />
-          </BrowserRouter>
+          <Provider store={store}>
+            <BrowserRouter>
+              {
+                // The TaskRoutesExecutor makes sure any data tasks are
+                // executed prior to our route being loaded.
+                // @see ./src/shared/routeTasks/
+                routerProps => (
+                  <TaskRoutesExecutor {...routerProps} dispatch={store.dispatch}>
+                    <TheApp />
+                  </TaskRoutesExecutor>
+                )
+              }
+            </BrowserRouter>
+          </Provider>
         </CodeSplitProvider>
       </ReactHotLoader>,
       container,

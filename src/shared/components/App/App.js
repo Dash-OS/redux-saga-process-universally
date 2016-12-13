@@ -39,6 +39,15 @@ function App() {
       />
 
       <Match
+        pattern="/posts"
+        render={routerProps =>
+          <CodeSplit chunkName="posts" modules={{ Posts: require('./Posts') }}>
+            { ({ Posts }) => Posts && <Posts {...routerProps} /> }
+          </CodeSplit>
+        }
+      />
+
+      <Match
         pattern="/about"
         render={routerProps =>
           <CodeSplit chunkName="about" modules={{ About: require('./About') }}>
