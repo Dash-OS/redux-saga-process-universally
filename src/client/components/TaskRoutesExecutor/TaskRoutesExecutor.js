@@ -12,9 +12,7 @@ type Props = {
   children: ReactNode,
 };
 
-class TaskRoutesExecutor extends Component {
-  props: Props;
-
+class TaskRoutesExecutor extends Component<void, Props, void> {
   componentWillMount() {
     if (this.props.location) {
       executeTasks(this.props.location, this.props.dispatch);
