@@ -81,7 +81,7 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
       // html, and then the client bundle can use this data to know which chunks/
       // modules need to be rehydrated prior to the application being rendered.
       codeSplitState: codeSplitContext.getState(),
-      // Provide the redux store state, this will be bound to the window.APP_STATE
+      // Provide the redux store state, this will be bound to the window.__APP_STATE__
       // so that we can rehydrate the state on the client.
       initialState: getState(),
     });
