@@ -1,3 +1,5 @@
+/* @flow */
+
 import express from 'express';
 import { resolve as pathResolve } from 'path';
 import appRootDir from 'app-root-dir';

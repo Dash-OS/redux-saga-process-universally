@@ -1,3 +1,5 @@
+/* @flow */
+
 // Deploys to now.
 // @see https://zeit.co/now
 

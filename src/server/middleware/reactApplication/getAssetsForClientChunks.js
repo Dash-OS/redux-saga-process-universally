@@ -1,3 +1,5 @@
+/* @flow */
+
 // This file resolves the assets available from our client bundle.
 
 import fs from 'fs';
@@ -41,7 +43,7 @@ const assetsJSONResolver = () => (
  *     to the render logic.  Having this method allows us to easily fetch
  *     the respective assets simply by using a chunk name. :)
  */
-function getAssetsForClientChunks(chunks) {
+function getAssetsForClientChunks(chunks: Array<string>) {
   return chunks.reduce((acc, chunkName) => {
     const chunkAssets = assetsJSONResolver()[chunkName];
     if (chunkAssets) {

@@ -1,3 +1,5 @@
+/* @flow */
+
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
@@ -45,17 +47,17 @@ function registerEnvFile() {
 // env file.
 registerEnvFile();
 
-export function getStringEnvVar(name, defaultVal) {
+export function getStringEnvVar(name : string, defaultVal : string) {
   return process.env[name] || defaultVal;
 }
 
-export function getIntEnvVar(name, defaultVal) {
+export function getIntEnvVar(name : string, defaultVal : number) {
   return process.env[name]
     ? parseInt(process.env[name], 10)
     : defaultVal;
 }
 
-export function getBoolVar(name, defaultVal) {
+export function getBoolVar(name : string, defaultVal : boolean) {
   return process.env[name]
     ? process.env[name] === 'true'
     : defaultVal;

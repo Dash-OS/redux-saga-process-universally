@@ -1,3 +1,5 @@
+/* @flow */
+
 import chokidar from 'chokidar';
 import { resolve as pathResolve } from 'path';
 import appRootDir from 'app-root-dir';

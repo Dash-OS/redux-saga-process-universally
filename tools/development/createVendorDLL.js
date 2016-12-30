@@ -1,3 +1,5 @@
+/* @flow */
+
 import webpack from 'webpack';
 import { resolve as pathResolve } from 'path';
 import appRootDir from 'app-root-dir';
@@ -6,7 +8,7 @@ import fs from 'fs';
 import config from '../../config';
 import { log, unique, without } from '../utils';
 
-function createVendorDLL(bundleName, bundleConfig) {
+function createVendorDLL(bundleName : string, bundleConfig : Object) {
   const dllConfig = config.bundles.client.devVendorDLL;
 
   // $FlowFixMe
