@@ -3,12 +3,16 @@
 const { log } = require('../utils');
 
 class ListenerManager {
+<<<<<<< HEAD
   name: string;
   lastConnectionKey: number;
   connectionMap: { [key: string|number]: Object };
   listener: Object;
 
   constructor(listener : Object, name : string) {
+=======
+  constructor(listener, name) {
+>>>>>>> next
     this.name = name || 'listener';
     this.lastConnectionKey = 0;
     this.connectionMap = {};

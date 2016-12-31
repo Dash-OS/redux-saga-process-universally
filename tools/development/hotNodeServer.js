@@ -6,6 +6,7 @@ import { spawn } from 'child_process';
 import { log } from '../utils';
 
 class HotNodeServer {
+<<<<<<< HEAD
   watcher: any;
   disposing: bool;
   server: ?Object;
@@ -13,6 +14,9 @@ class HotNodeServer {
   clientCompiling: bool;
 
   constructor(name: string, compiler : Object, clientCompiler : Object) {
+=======
+  constructor(name, compiler, clientCompiler) {
+>>>>>>> next
     const compiledEntryFile = path.resolve(
       appRootDir.get(),
       compiler.options.output.path,

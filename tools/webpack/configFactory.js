@@ -12,7 +12,10 @@ import appRootDir from 'app-root-dir';
 import WebpackMd5Hash from 'webpack-md5-hash';
 import CodeSplitPlugin from 'code-split-component/webpack';
 import { removeEmpty, ifElse, merge, happyPackPlugin } from '../utils';
+<<<<<<< HEAD
 import type { BuildOptions } from '../types';
+=======
+>>>>>>> next
 import config, { clientConfig } from '../../config';
 
 /**
