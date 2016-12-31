@@ -18,6 +18,6 @@ Executes `flow-bin`, performing flow based type checking on the source.  If you 
 
 Installs the flow type definitions for the projects dependencies from the official "flow-typed" repository.
 
-## `npm run flow:report`
+## `npm run flow:coverage`
 
 Executes `flow-coverage-report`, generating a report on your type check coverage.  It returns with an error if your coverage is below 80%.  After you have run it I recommend clicking into the generated flow-coverage directory and opening the HTML report.  You can click through into files to see where your coverage is lacking.
