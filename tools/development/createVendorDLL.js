@@ -6,7 +6,7 @@ import appRootDir from 'app-root-dir';
 import md5 from 'md5';
 import fs from 'fs';
 import config from '../../config';
-import { log, unique, without } from '../utils';
+import { log } from '../utils';
 
 function createVendorDLL(bundleName : string, bundleConfig : Object) {
   const dllConfig = config.bundles.client.devVendorDLL;
@@ -14,13 +14,7 @@ function createVendorDLL(bundleName : string, bundleConfig : Object) {
   // $FlowFixMe
   const pkg = require(pathResolve(appRootDir.get(), './package.json'));
 
-  const calculateDependencies = () => {
-    const dependencies = Object.keys(pkg.dependencies);
-    const includeDependencies = unique(dependencies.concat(dllConfig.include));
-    return without(includeDependencies, dllConfig.exclude);
-  };
-
-  const devDLLDependencies = calculateDependencies().sort();
+  const devDLLDependencies = dllConfig.include.sort();
 
   // We calculate a hash of the package.json's dependencies, which we can use
   // to determine if dependencies have changed since the last time we built
@@ -70,9 +64,8 @@ function createVendorDLL(bundleName : string, bundleConfig : Object) {
       log({
         title: 'vendorDLL',
         level: 'info',
-        message: 'Vendor DLL build complete. Modules list:',
+        message: `Vendor DLL build complete. The following dependencies have been included:\n\t-${devDLLDependencies.join('\n\t-')}\n`,
       });
-      console.log(devDLLDependencies);
 
       const webpackConfig = webpackConfigFactory();
       const vendorDLLCompiler = webpack(webpackConfig);
@@ -95,7 +88,8 @@ function createVendorDLL(bundleName : string, bundleConfig : Object) {
       log({
         title: 'vendorDLL',
         level: 'warn',
-        message: `Generating a new "${bundleName}" vendor dll for boosted development performance...`,
+        message: `Generating a new "${bundleName}" Vendor DLL for boosted development performance.
+The Vendor DLL helps to speed up your development workflow by reducing Webpack build times.  It does this by seperating Vendor DLLs from your primary bundles, thereby allowing Webpack to ignore them when having to rebuild your code for changes.  We recommend that you add all your client bundle specific dependencies to the Vendor DLL configuration (within /config).`,
       });
       buildVendorDLL().then(resolve).catch(reject);
     } else {

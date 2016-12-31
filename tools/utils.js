@@ -27,11 +27,6 @@ export function happyPackPlugin({ name, loaders } : HappyPackConfig) {
   });
 }
 
-// Returns the unique items within the given array.
-export function unique(array : Array<any>) {
-  return Array.from(new Set(array));
-}
-
 // Removes the empty items from the given array.
 export function removeEmpty(x : Array<any>) : Array<any> {
   return x.filter(y => y != null);
@@ -114,7 +109,7 @@ export function log(options : NotificationOptions) {
   const msg = `==> ${title} -> ${options.message}`;
 
   switch (level) {
-    case 'warn': console.log(colors.red(msg)); break;
+    case 'warn': console.log(colors.yellow(msg)); break;
     case 'error': console.log(colors.bgRed.white(msg)); break;
     case 'info':
     default: console.log(colors.green(msg));
@@ -123,9 +118,4 @@ export function log(options : NotificationOptions) {
 
 export function exec(command : string) {
   execSync(command, { stdio: 'inherit', cwd: appRootDir.get() });
-}
-
-// Removes the "remove" array items from the "source" array.
-export function without(source : Array<string>, remove : Array<string>) {
-  return source.filter(module => remove.findIndex(x => x === module) === -1);
 }

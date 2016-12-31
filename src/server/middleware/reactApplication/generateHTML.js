@@ -117,7 +117,7 @@ export default function generateHTML(args: Args) {
           // @see /tools/development/ensureVendorDLLExists.js
           process.env.NODE_ENV === 'development'
             && config.bundles.client.devVendorDLL.enabled
-            ? scriptTag(`${config.bundles.client.webPath}${config.bundles.client.devVendorDLL.name}.js`)
+            ? scriptTag(`${config.bundles.client.webPath}${config.bundles.client.devVendorDLL.name}.js?t=${Date.now()}`)
             : ''
         }
         ${scriptTags(assetsForRender.js)}

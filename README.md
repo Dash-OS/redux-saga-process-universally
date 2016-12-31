@@ -19,6 +19,7 @@ This starter kit contains all the build tooling and configuration you need to ki
   - 👀 `react` as the view.
   - 🔀 `react-router` v4 as the router.
   - 🚄 `express` server.
+  - 🎭 `jest` as the test framework.
   - 🖌 Very basic CSS support - it's up to you to extend it with CSS Modules etc.
   - ✂️ Code splitting - easily define code split points in your source using `code-split-component`.
   - 🌍 Server Side Rendering.
@@ -39,24 +40,24 @@ This starter kit contains all the build tooling and configuration you need to ki
 
 Redux/MobX, data persistence, modern styling frameworks and all the other bells and whistles have been explicitly excluded from this starter kit.  It's up to you to decide what technologies you would like to add to your own implementation based upon your own needs.
 
-> However, we now include a set of "feature branches", each implementing a technology on top of the clean master branch.  This provides you with an example on how to integrate said technologies, or use the branches to merge in a configuration that meets your requirements.  See the [`Feature Branches`](/docs/FeaturesBranches.md) documentation for more.
+> However, we now include a set of "feature branches", each implementing a technology on top of the clean master branch.  This provides you with an example on how to integrate said technologies, or use the branches to merge in a configuration that meets your requirements.  See the [`Feature Branches`](/docs/FEATURE_BRANCHES.md) documentation for more.
 
 ## Getting started
 
 ```bash
 git clone https://github.com/ctrlplusb/react-universally my-project
 cd my-project
-npm run development
+yarn run development
 ```
 
 Go make some changes to the `Home` component to see the tooling in action.
 
 ## Docs
 
- - [Project Overview](/docs/ProjectOverview.md)
- - [Application Configuration](/docs/ApplicationConfig.md)
- - [npm script commands](/docs/NPMCommands.md)
- - [Feature Branches](/docs/FeaturesBranches.md)
- - [Deploy your very own Server Side Rendering React App in 4 easy steps](/docs/DeployToNow.md)
+ - [Project Overview](/docs/PROJECT_OVERVIEW.md)
+ - [Application Configuration](/docs/APPLICATION_CONFIG.md)
+ - [Package Script Commands](/docs/PKG_SCRIPTS.md)
+ - [Feature Branches](/docs/FEATURE_BRANCHES.md)
+ - [Deploy your very own Server Side Rendering React App in 4 easy steps](/docs/DEPLOY_TO_NOW.md)
  - [FAQ](/docs/FAQ.md)
  - [Changelog](/CHANGELOG.md)
