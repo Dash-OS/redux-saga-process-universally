@@ -12,11 +12,8 @@ import appRootDir from 'app-root-dir';
 import WebpackMd5Hash from 'webpack-md5-hash';
 import CodeSplitPlugin from 'code-split-component/webpack';
 import { removeEmpty, ifElse, merge, happyPackPlugin } from '../utils';
-<<<<<<< HEAD
-import type { BuildOptions } from '../types';
-=======
->>>>>>> next
 import config, { clientConfig } from '../../config';
+import type { BuildOptions } from '../types';
 
 /**
  * This function is responsible for creating the webpack configuration for
