@@ -12,8 +12,8 @@ import appRootDir from 'app-root-dir';
 import WebpackMd5Hash from 'webpack-md5-hash';
 import CodeSplitPlugin from 'code-split-component/webpack';
 import { removeEmpty, ifElse, merge, happyPackPlugin } from '../utils';
-import type { BuildOptions } from '../types';
 import config, { clientConfig } from '../../config';
+import type { BuildOptions } from '../types';
 
 /**
  * This function is responsible for creating the webpack configuration for
@@ -86,7 +86,13 @@ export default function webpackConfigFactory(buildOptions: BuildOptions) {
           // loaders, e.g. CSS or SASS.
           // For these cases please make sure that the file extensions are
           // registered within the following configuration setting.
-          { whitelist: config.nodeBundlesIncludeNodeModuleFileTypes },
+          { whitelist:
+              // We always want the source-map-support excluded.
+              ['source-map-support/register'].concat(
+                // Then exclude any items specified in the config.
+                config.nodeBundlesIncludeNodeModuleFileTypes || [],
+              ),
+          },
         ),
       ),
     ]),
@@ -131,6 +137,10 @@ export default function webpackConfigFactory(buildOptions: BuildOptions) {
       // This makes importing of the output module as simple as:
       //   import server from './build/server';
       index: removeEmpty([
+        // This grants us source map support, which combined with our webpack
+        // source maps will give us nice stack traces for our node executed
+        // bundles.
+        ifNode('source-map-support/register'),
         // Required to support hot reloading of our client.
         ifDevClient('react-hot-loader/patch'),
         // Required to support hot reloading of our client.
