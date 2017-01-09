@@ -7,9 +7,9 @@ import { ServerRouter, createServerRenderContext } from 'react-router';
 import { Provider } from 'react-redux';
 import { CodeSplitProvider, createRenderContext } from 'code-split-component';
 import Helmet from 'react-helmet';
+import { runJobs } from 'react-jobs/ssr';
 import generateHTML from './generateHTML';
 import DemoApp from '../../../shared/components/DemoApp';
-import runTasksForLocation from '../../../shared/routeTasks/runTasksForLocation';
 import configureStore from '../../../shared/redux/configureStore';
 import config from '../../../../config';
 
@@ -43,29 +43,39 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
 
   // Create the redux store.
   const store = configureStore();
-  const { dispatch, getState } = store;
+  const { getState } = store;
 
-  // Set up a function we can call to render the app and return the result via
-  // the response.
-  const renderApp = () => {
-    // First create a context for <ServerRouter>, which will allow us to
-    // query for the results of the render.
-    const reactRouterContext = createServerRenderContext();
+  // First create a context for <ServerRouter>, which will allow us to
+  // query for the results of the render.
+  const reactRouterContext = createServerRenderContext();
 
-    // We also create a context for our <CodeSplitProvider> which will allow us
-    // to query which chunks/modules were used during the render process.
-    const codeSplitContext = createRenderContext();
+  // We also create a context for our <CodeSplitProvider> which will allow us
+  // to query which chunks/modules were used during the render process.
+  const codeSplitContext = createRenderContext();
+
+  // Define our app to be server rendered.
+  const app = (
+    <CodeSplitProvider context={codeSplitContext}>
+      <ServerRouter location={request.url} context={reactRouterContext}>
+        <Provider store={store}>
+          <DemoApp />
+        </Provider>
+      </ServerRouter>
+    </CodeSplitProvider>
+  );
+
+  // Firstly we will use the "runJobs" helper to execute all the jobs
+  // that have been attached to the components being rendered in our app.
+  runJobs(app).then(({ appWithJobs, state, STATE_IDENTIFIER }) => {
+    // runJobs returns a new version of our app with all the job data accessible
+    // to it.  We will pass this to the renderToString function.  Additionally
+    // we need to pass the returned state to our generateHTML function so
+    // that the browser can rehdrate our application with the appropriate
+    // job data.  This will then avoid react checksum issues and thereby
+    // prevent our app from "double rendering" on the client.
 
     // Create our application and render it into a string.
-    const reactAppString = renderToString(
-      <CodeSplitProvider context={codeSplitContext}>
-        <ServerRouter location={request.url} context={reactRouterContext}>
-          <Provider store={store}>
-            <DemoApp />
-          </Provider>
-        </ServerRouter>
-      </CodeSplitProvider>,
-    );
+    const reactAppString = renderToString(appWithJobs);
 
     // Generate the html response.
     const html = generateHTML({
@@ -84,6 +94,13 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
       // Provide the redux store state, this will be bound to the window.__APP_STATE__
       // so that we can rehydrate the state on the client.
       initialState: getState(),
+      // Pass through the react-jobs provided state so that it can be serialized
+      // into the HTML and then the browser can use the data to rehydrate the
+      // application appropriately.
+      jobsState: {
+        state,
+        STATE_IDENTIFIER,
+      },
     });
 
     // Get the render result from the server render context.
@@ -107,31 +124,7 @@ function reactApplicationMiddleware(request: $Request, response: $Response) {
           : 200,
       )
       .send(html);
-  };
-
-  // Execute any 'prefetchData' tasks that get matched for the request location.
-  const executingTasks = runTasksForLocation(
-    { pathname: request.originalUrl }, ['prefetchData'], { dispatch },
-  );
-
-  if (executingTasks) {
-    // Some tasks are executing so we will chain the promise, waiting for them
-    // to complete before we render the application.
-    executingTasks.then(({ routes }) => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Finished route tasks', routes); // eslint-disable-line no-console,max-len
-      }
-
-      // The tasks are complete! Our redux state will probably contain some
-      // data now. :)
-
-      // Lets render the app and return the response.
-      renderApp();
-    });
-  } else {
-    // No tasks are being executed so we can render and return the response.
-    renderApp();
-  }
+  });
 }
 
 export default (reactApplicationMiddleware : Middleware);

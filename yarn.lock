@@ -4754,6 +4754,10 @@ react-hot-loader@3.0.0-beta.6:
     redbox-react "^1.2.5"
     source-map "^0.4.4"
 
+react-jobs@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-jobs/-/react-jobs-0.3.0.tgz#33cbc33f7a96d393429ef355b57dd37856f025b4"
+
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
@@ -4769,10 +4773,6 @@ react-redux@5.0.1:
     lodash "^4.2.0"
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
-
-react-router-addons-routes@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/react-router-addons-routes/-/react-router-addons-routes-0.0.3.tgz#563ac20d1f45fdca99fa98199bdfac2ec33dd3ac"
 
 react-router@4.0.0-alpha.6:
   version "4.0.0-alpha.6"

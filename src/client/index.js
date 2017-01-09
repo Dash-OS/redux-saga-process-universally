@@ -5,11 +5,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import { CodeSplitProvider, rehydrateState } from 'code-split-component';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
+import { rehydrateJobs } from 'react-jobs/ssr';
 import configureStore from '../shared/redux/configureStore';
 import ReactHotLoader from './components/ReactHotLoader';
 import DemoApp from '../shared/components/DemoApp';
-import TaskRoutesExecutor from './components/TaskRoutesExecutor';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -30,29 +30,23 @@ function renderApp(TheApp) {
   // to do as it will ensure that our React checksum for the client will match
   // the content returned by the server.
   // @see https://github.com/ctrlplusb/code-split-component
-  rehydrateState().then(codeSplitState =>
-    render(
+  rehydrateState().then((codeSplitState) => {
+    const app = (
       <ReactHotLoader>
         <CodeSplitProvider state={codeSplitState}>
-          <Provider store={store}>
+          <ReduxProvider store={store}>
             <BrowserRouter>
-              {
-                // The TaskRoutesExecutor makes sure any data tasks are
-                // executed prior to our route being loaded.
-                // @see ./src/shared/routeTasks/
-                routerProps => (
-                  <TaskRoutesExecutor {...routerProps} dispatch={store.dispatch}>
-                    <TheApp />
-                  </TaskRoutesExecutor>
-                )
-              }
+              <TheApp />
             </BrowserRouter>
-          </Provider>
+          </ReduxProvider>
         </CodeSplitProvider>
-      </ReactHotLoader>,
-      container,
-    ),
-  );
+      </ReactHotLoader>
+    );
+
+    rehydrateJobs(app).then(({ appWithJobs }) =>
+      render(appWithJobs, container),
+    );
+  });
 }
 
 // The following is needed so that we can support hot reloading our application.

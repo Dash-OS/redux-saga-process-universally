@@ -37,10 +37,11 @@ type Args = {
   nonce: string,
   helmet?: Head,
   codeSplitState?: { chunks: Array<string>, modules: Array<string> },
+  jobsState?: { state: Object, STATE_IDENTIFIER: string },
 };
 
 export default function generateHTML(args: Args) {
-  const { reactAppString, initialState, nonce, helmet, codeSplitState } = args;
+  const { reactAppString, initialState, nonce, helmet, codeSplitState, jobsState } = args;
 
   // The chunks that we need to fetch the assets (js/css) for and then include
   // said assets as script/style tags within our html.
@@ -100,6 +101,11 @@ export default function generateHTML(args: Args) {
           // rendered modules need to be rehydrated.
           codeSplitState
             ? inlineScript(`window.${STATE_IDENTIFIER}=${serialize(codeSplitState)};`)
+            : ''
+        }
+        ${
+          jobsState
+            ? inlineScript(`window.${jobsState.STATE_IDENTIFIER}=${serialize(jobsState.state)};`)
             : ''
         }
         ${
